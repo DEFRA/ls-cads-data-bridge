@@ -171,7 +171,7 @@ public class S3ClientFactoryTests
     [Fact]
     public void GivenCredentialsAreNotSet_WhenCallingAddClientWithCredentials_ShouldThrow()
     {
-        Action act = () => _clientFactory.AddClientWithCredentials<TestStorageClient>(DefaultBucketName, "TEST_ACCESS_KEY", "TEST_SECRET_KEY", _defaultAmazonS3Config);
+        Action act = () => _clientFactory.AddClientWithCredentials<TestStorageClient>(DefaultBucketName, "INVALID_TEST_ACCESS_KEY", "INVALID_TEST_SECRET_KEY", _defaultAmazonS3Config);
 
         act.Should().Throw<InvalidOperationException>();
 
