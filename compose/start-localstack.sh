@@ -37,5 +37,4 @@ topic_arn=$(awslocal sns create-topic \
   --query 'TopicArn')
 
 echo "SNS Topic created: $topic_arn"
-
 echo "Bootstrapping Complete"
