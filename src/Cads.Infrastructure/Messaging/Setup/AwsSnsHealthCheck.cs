@@ -14,8 +14,8 @@ public class AwsSnsHealthCheck(IAmazonSimpleNotificationService snsClient, IServ
         HealthCheckContext context,
         CancellationToken cancellationToken = default)
     {
-        var defaultTopicName = _config.DataBridgeEventsTopic.TopicName;
-        var defaultTopicArn = _config.DataBridgeEventsTopic.TopicArn ?? string.Empty;
+        var defaultTopicName = _config.CadsCtsTopic.TopicName;
+        var defaultTopicArn = _config.CadsCtsTopic.TopicArn ?? string.Empty;
 
         try
         {

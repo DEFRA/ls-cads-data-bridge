@@ -17,8 +17,8 @@ public class AwsSnsHealthCheckTests
 
     private readonly AwsSnsHealthCheck _sut;
 
-    private const string DataBridgeEventsTopicName = "ls-cads-cts-events";
-    private const string DataBridgeEventsTopicArn = $"arn:aws:sns:eu-west-2:000000000000:{DataBridgeEventsTopicName}";
+    private const string CadsCtsTopicName = "ls-cads-cts-events";
+    private const string CadsCtsTopicArn = $"arn:aws:sns:eu-west-2:000000000000:{CadsCtsTopicName}";
 
     public AwsSnsHealthCheckTests()
     {
@@ -26,14 +26,14 @@ public class AwsSnsHealthCheckTests
 
         _amazonSimpleNotificationServiceMock
             .Setup(x => x.ListTopicsAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new ListTopicsResponse { HttpStatusCode = HttpStatusCode.OK, Topics = [new Topic { TopicArn = DataBridgeEventsTopicArn }] });
+            .ReturnsAsync(new ListTopicsResponse { HttpStatusCode = HttpStatusCode.OK, Topics = [new Topic { TopicArn = CadsCtsTopicArn }] });
 
         _amazonSimpleNotificationServiceMock
             .Setup(x => x.GetTopicAttributesAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetTopicAttributesResponse { HttpStatusCode = HttpStatusCode.OK });
 
         _serviceBusSenderConfigurationMock = new Mock<IServiceBusSenderConfiguration>();
-        SetupServiceBusSenderConfiguration(DataBridgeEventsTopicName, DataBridgeEventsTopicArn);
+        SetupServiceBusSenderConfiguration(CadsCtsTopicName, CadsCtsTopicArn);
 
         _sut = new AwsSnsHealthCheck(_amazonSimpleNotificationServiceMock.Object, _serviceBusSenderConfigurationMock.Object);
     }
@@ -49,7 +49,7 @@ public class AwsSnsHealthCheckTests
     [Fact]
     public async Task GivenListTopicsRequestFails_WhenCallingCheckHealthAsync_ShouldFail()
     {
-        SetupServiceBusSenderConfiguration(DataBridgeEventsTopicName, string.Empty);
+        SetupServiceBusSenderConfiguration(CadsCtsTopicName, string.Empty);
 
         _amazonSimpleNotificationServiceMock
             .Setup(x => x.ListTopicsAsync(It.IsAny<CancellationToken>()))
@@ -75,7 +75,7 @@ public class AwsSnsHealthCheckTests
     [Fact]
     public async Task GivenGetTopicAttributesAsyncRequestFails_WhenCallingCheckHealthAsync_ShouldFail()
     {
-        SetupServiceBusSenderConfiguration(DataBridgeEventsTopicName, string.Empty);
+        SetupServiceBusSenderConfiguration(CadsCtsTopicName, string.Empty);
 
         _amazonSimpleNotificationServiceMock
             .Setup(x => x.GetTopicAttributesAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -84,12 +84,12 @@ public class AwsSnsHealthCheckTests
         var result = await _sut.CheckHealthAsync(_healthCheckContext, CancellationToken.None);
 
         result.Status.Should().Be(HealthStatus.Degraded);
-        result.Description.Should().Be($"SNS topic '{DataBridgeEventsTopicName}' attributes fetch returned non-OK status.");
+        result.Description.Should().Be($"SNS topic '{CadsCtsTopicName}' attributes fetch returned non-OK status.");
     }
 
     private void SetupServiceBusSenderConfiguration(string topicName, string topicArn = "")
     {
-        _serviceBusSenderConfigurationMock.Setup(c => c.DataBridgeEventsTopic).Returns(new TopicConfiguration
+        _serviceBusSenderConfigurationMock.Setup(c => c.CadsCtsTopic).Returns(new TopicConfiguration
         {
             TopicName = topicName,
             TopicArn = topicArn
