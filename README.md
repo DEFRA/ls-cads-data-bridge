@@ -77,7 +77,7 @@ dotnet test
 
 Run CDP-Deployments application:
 ```bash
-dotnet run --project LsCadsDataBridge --launch-profile Development
+dotnet run --project Cads.DataBridge --launch-profile Development
 ```
 
 ### SonarCloud
