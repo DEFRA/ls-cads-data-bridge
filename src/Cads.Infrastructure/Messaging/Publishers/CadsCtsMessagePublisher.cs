@@ -7,14 +7,14 @@ using Cads.Infrastructure.Messaging.Factories;
 
 namespace Cads.Infrastructure.Messaging.Publishers;
 
-public class DataBridgeMessagePublisher(IAmazonSimpleNotificationService amazonSimpleNotificationService,
-    IMessageFactory messageFactory, IServiceBusSenderConfiguration serviceBusSenderConfiguration) : IMessagePublisher<DataBridgeTopicClient>
+public class CadsCtsMessagePublisher(IAmazonSimpleNotificationService amazonSimpleNotificationService,
+    IMessageFactory messageFactory, IServiceBusSenderConfiguration serviceBusSenderConfiguration) : IMessagePublisher<CadsCtsTopicClient>
 {
     private readonly IAmazonSimpleNotificationService _amazonSimpleNotificationService = amazonSimpleNotificationService;
     private readonly IMessageFactory _messageFactory = messageFactory;
     private readonly IServiceBusSenderConfiguration _serviceBusSenderConfiguration = serviceBusSenderConfiguration;
 
-    public string TopicArn => _serviceBusSenderConfiguration.DataBridgeEventsTopic.TopicArn;
+    public string TopicArn => _serviceBusSenderConfiguration.CadsCtsTopic.TopicArn;
 
     public async Task PublishAsync<TMessage>(TMessage? message, CancellationToken cancellationToken = default)
     {

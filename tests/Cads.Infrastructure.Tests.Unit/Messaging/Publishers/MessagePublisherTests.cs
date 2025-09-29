@@ -16,7 +16,7 @@ public class MessagePublisherTests
     private readonly Mock<IServiceBusSenderConfiguration> _serviceBusSenderConfigurationMock = new();
     private readonly MessageFactory _messageFactory = new();
 
-    private readonly DataBridgeMessagePublisher _sut;
+    private readonly CadsCtsMessagePublisher _sut;
 
     private const string TestTopicArn = "arn:aws:sns:eu-west-2:000000000000:test-topic";
 
@@ -28,7 +28,7 @@ public class MessagePublisherTests
 
         SetupServiceBusSenderConfiguration(TestTopicArn);
 
-        _sut = new DataBridgeMessagePublisher(_amazonSimpleNotificationServiceMock.Object, _messageFactory, _serviceBusSenderConfigurationMock.Object);
+        _sut = new CadsCtsMessagePublisher(_amazonSimpleNotificationServiceMock.Object, _messageFactory, _serviceBusSenderConfigurationMock.Object);
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class MessagePublisherTests
 
     private void SetupServiceBusSenderConfiguration(string? topicArn)
     {
-        _serviceBusSenderConfigurationMock.Setup(c => c.DataBridgeEventsTopic).Returns(new TopicConfiguration
+        _serviceBusSenderConfigurationMock.Setup(c => c.CadsCtsTopic).Returns(new TopicConfiguration
         {
             TopicArn = topicArn!
         });

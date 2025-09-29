@@ -42,7 +42,7 @@ public static class ServiceCollectionExtensions
             services.AddAWSService<IAmazonSimpleNotificationService>();
         }
 
-        if (serviceBusSenderConfiguration.DataBridgeEventsTopic.HealthcheckEnabled)
+        if (serviceBusSenderConfiguration.CadsCtsTopic.HealthcheckEnabled)
         {
             services.AddHealthChecks()
                 .AddCheck<AwsSnsHealthCheck>("aws_sns", tags: ["aws", "sns"]);
@@ -55,7 +55,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddTransient<IMessageFactory, MessageFactory>();
 
-        services.AddSingleton<IMessagePublisher<DataBridgeTopicClient>, DataBridgeMessagePublisher>();
+        services.AddSingleton<IMessagePublisher<CadsCtsTopicClient>, CadsCtsMessagePublisher>();
 
         return services;
     }

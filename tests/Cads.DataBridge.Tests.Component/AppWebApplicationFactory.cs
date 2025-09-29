@@ -28,8 +28,8 @@ public class AppWebApplicationFactory : WebApplicationFactory<Program>
     public Mock<IMongoClient>? MongoClientMock;
 
     private const string ExternalStorageBucket = "test-external-bucket";
-    private const string DataBridgeEventsTopicName = "ls-cads-cts-events";
-    private const string DataBridgeEventsTopicArn = $"arn:aws:sns:eu-west-2:000000000000:{DataBridgeEventsTopicName}";
+    private const string CadsCtsTopicName = "ls-cads-cts-events";
+    private const string CadsCtsTopicArn = $"arn:aws:sns:eu-west-2:000000000000:{CadsCtsTopicName}";
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -61,8 +61,8 @@ public class AppWebApplicationFactory : WebApplicationFactory<Program>
         Environment.SetEnvironmentVariable("IMB_S3_ACCESS_KEY", "test");
         Environment.SetEnvironmentVariable("IMB_S3_ACCESS_SECRET", "test");
         Environment.SetEnvironmentVariable("StorageConfiguration__ExternalStorage__BucketName", ExternalStorageBucket);
-        Environment.SetEnvironmentVariable("ServiceBusSenderConfiguration__DataBridgeEventsTopic__TopicName", DataBridgeEventsTopicName);
-        Environment.SetEnvironmentVariable("ServiceBusSenderConfiguration__DataBridgeEventsTopic__TopicArn", string.Empty);
+        Environment.SetEnvironmentVariable("ServiceBusSenderConfiguration__CadsCtsTopic__TopicName", CadsCtsTopicName);
+        Environment.SetEnvironmentVariable("ServiceBusSenderConfiguration__CadsCtsTopic__TopicArn", string.Empty);
     }
 
     private static void ConfigureAwsOptions(IServiceCollection services)
@@ -102,7 +102,7 @@ public class AppWebApplicationFactory : WebApplicationFactory<Program>
 
         AmazonSimpleNotificationServiceMock
             .Setup(x => x.ListTopicsAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new ListTopicsResponse { HttpStatusCode = HttpStatusCode.OK, Topics = [new Topic { TopicArn = DataBridgeEventsTopicArn }] });
+            .ReturnsAsync(new ListTopicsResponse { HttpStatusCode = HttpStatusCode.OK, Topics = [new Topic { TopicArn = CadsCtsTopicArn }] });
 
         AmazonSimpleNotificationServiceMock
             .Setup(x => x.GetTopicAttributesAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
